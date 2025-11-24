@@ -4,7 +4,7 @@ const matchCountDisplay = document.getElementById('match-count');
 const startOverlay = document.getElementById('start-overlay'); 
 const livesDisplay = document.getElementById('lives-display'); 
 
-// Mümkün olan tüm sembollerin havuzu (16 çift = 32 kart kapasitesi için)
+// Mümkün olan tüm sembollerin havuzu
 const ALL_SYMBOLS = [
     '⭐', '🌈', '🔥', '💧', '🍎', '🚗', '💡', '🔔', 
     '⚽', '🎈', '⚙️', '🎯', '🚀', '👑', '🔑', '🧊' 
@@ -12,20 +12,17 @@ const ALL_SYMBOLS = [
 const BOMB_SYMBOL = '💣'; 
 
 // --- Bölüm Zorluk Ayarları ---
-// pairs: eş_sayısı (kart sayısı = pairs * 2)
-// bombs: bomba_sayısı (playerLives = bombs olur)
-// boardClass: CSS grid düzeni
 const LEVEL_CONFIG = {
-    1: { pairs: 4, bombs: 0, boardClass: 'board-small' },   // 8 kart. Can: 0 (Bomba olmadığı için can gerekmez)
-    2: { pairs: 6, bombs: 1, boardClass: 'board-medium' },  // 13 kart. Can: 1
-    3: { pairs: 8, bombs: 2, boardClass: 'board-medium' },  // 18 kart. Can: 2
-    4: { pairs: 10, bombs: 3, boardClass: 'board-large' },  // 23 kart. Can: 3
-    5: { pairs: 12, bombs: 3, boardClass: 'board-large' }   // 27 kart. Can: 3
+    1: { pairs: 4, bombs: 0, boardClass: 'board-small' },   
+    2: { pairs: 6, bombs: 1, boardClass: 'board-medium' },  
+    3: { pairs: 8, bombs: 2, boardClass: 'board-medium' },  
+    4: { pairs: 10, bombs: 3, boardClass: 'board-large' },  
+    5: { pairs: 12, bombs: 3, boardClass: 'board-large' }   
 };
 
 // --- Durum Değişkenleri ---
 let currentLevel = 1; 
-let playerLives = 0; // Başlangıçta 0, initializeGame'de ayarlanır
+let playerLives = 0; 
 let gameCards = []; 
 let flippedCards = []; 
 let matchedPairs = 0; 
@@ -67,8 +64,14 @@ function createCardElement(symbol, index) {
 
 function updateLivesDisplay() {
     let hearts = '';
-    // Bomba sayısı 0 ise 'Can Yok' yazdırılabilir, aksi halde kalp sayısı bomba sayısına eşit olur.
-    if (playerLives === 0 && LEVEL_CONFIG[currentLevel].bombs > 0) {
+    const maxLives = LEVEL_CONFIG[currentLevel].bombs;
+    
+    if (maxLives === 0) {
+        livesDisplay.innerHTML = `Can: Yok`;
+        return;
+    }
+    
+    if (playerLives <= 0) {
         hearts = '💔';
     } else {
         for (let i = 0; i < playerLives; i++) {
@@ -76,8 +79,6 @@ function updateLivesDisplay() {
         }
     }
     
-    // Toplam canı da göstermek için
-    const maxLives = LEVEL_CONFIG[currentLevel].bombs;
     livesDisplay.innerHTML = `Can: ${hearts} (${playerLives}/${maxLives})`;
 }
 
@@ -100,10 +101,8 @@ function prepareCardsForLevel(level) {
 function initializeGame(level) {
     const config = LEVEL_CONFIG[level];
     
-    // 1. Durumu Sıfırla/Güncelle
     gameBoard.innerHTML = '';
     
-    // Tahta boyut sınıflarını ayarla
     gameBoard.className = 'game-board';
     gameBoard.classList.add(config.boardClass); 
     
@@ -112,14 +111,11 @@ function initializeGame(level) {
     isProcessing = false;
     matchCountDisplay.textContent = `0 / ${config.pairs}`;
     
-    // CAN SİSTEMİ GÜNCELLEMESİ: Can, o bölümdeki bomba sayısına eşitlenir.
     playerLives = config.bombs; 
     updateLivesDisplay();
     
-    // 2. Kart Dizisini Bölüme Göre Hazırla
     gameCards = prepareCardsForLevel(level);
 
-    // 3. Tahtaya Kartları Ekle
     gameCards.forEach((symbol, index) => {
         const cardElement = createCardElement(symbol, index);
         gameBoard.appendChild(cardElement);
@@ -133,7 +129,6 @@ function startCountdown() {
     const allCards = document.querySelectorAll('.card');
     isProcessing = true; 
 
-    // Kartları 5 saniyeliğine çevir
     allCards.forEach(card => {
         if (!card.classList.contains('matched')) {
             card.classList.add('flipped');
@@ -141,7 +136,6 @@ function startCountdown() {
         card.style.pointerEvents = 'none'; 
     });
 
-    // 5 saniye sonra kartları kapat ve oyunu başlat
     setTimeout(() => {
         allCards.forEach(card => {
             if (!card.classList.contains('matched')) {
@@ -154,7 +148,8 @@ function startCountdown() {
 }
 
 function goToNextLevel() {
-    if (currentLevel >= Object.keys(LEVEL_CONFIG).length) {
+    const maxLevel = Object.keys(LEVEL_CONFIG).length;
+    if (currentLevel >= maxLevel) {
         alert("TEBRİKLER! Tüm Bölümleri Tamamladınız! Bu harika bir başarı.");
         currentLevel = 1; 
     } else {
@@ -162,14 +157,11 @@ function goToNextLevel() {
         alert(`Tebrikler! Bölüm ${currentLevel - 1} tamamlandı. Yeni Bölüm ${currentLevel} başlıyor!`);
     }
 
-    // Yeni bölümü hazırla
     initializeGame(currentLevel); 
     
-    // Overlay'i göster
     gameBoard.classList.add('hidden');
     startOverlay.classList.remove('hidden');
     
-    // Mesajı güncelle
     const config = LEVEL_CONFIG[currentLevel];
     startOverlay.querySelector('h2').textContent = `Bölüm ${currentLevel}`;
     const totalCards = config.pairs * 2 + config.bombs;
@@ -183,7 +175,6 @@ function restartLevel() {
     gameBoard.classList.add('hidden');
     startOverlay.classList.remove('hidden');
     
-    // Mesajı güncelle
     const config = LEVEL_CONFIG[currentLevel];
     const totalCards = config.pairs * 2 + config.bombs;
     const canMesaji = config.bombs === 0 ? "Bomba yok, can gerekmez." : `Can: ${config.bombs} adet (Bomba sayısı kadar).`;
@@ -205,21 +196,26 @@ function handleCardClick(card) {
         
         const config = LEVEL_CONFIG[currentLevel];
         
-        if (config.bombs > 0) { // Sadece bomba varsa can kontrolü yapılır
-            playerLives--;
-            updateLivesDisplay();
+        if (config.bombs > 0) {
             isProcessing = true;
+            playerLives--; // Canı 1 azalt
+            updateLivesDisplay();
             
             setTimeout(() => {
-                card.classList.add('matched'); 
+                card.classList.add('matched'); // Bomba kartı pasif kalır
                 
+                // DÜZELTME: SADECE CAN <= 0 İSE BÖLÜM YENİDEN BAŞLAR
                 if (playerLives <= 0) {
                     alert(`Tüm Bombaları 💥 Patlattınız! Bölüm ${currentLevel} maalesef yeniden başlıyor.`);
                     restartLevel();
                 } else {
+                     // Can > 0 ise, oyuna devam et
                      alert(`BOOM! 💥 Bir can kaybettiniz. Kalan Can: ${playerLives}.`);
-                     // Can kaybından sonra tahtayı sıfırla ve yeniden başla
-                     restartLevel(); 
+                     
+                     // Kartı geri çevirip durumu sıfırla, seviyeyi sıfırlama!
+                     card.classList.remove('flipped');
+                     card.classList.remove('matched');
+                     isProcessing = false;
                 }
             }, 800);
             return; 
@@ -246,7 +242,6 @@ function handleCardClick(card) {
                 flippedCards = [];
                 isProcessing = false;
                 
-                // BÖLÜM BİTTİ Mİ?
                 if (matchedPairs === config.pairs) {
                     setTimeout(() => goToNextLevel(), 500);
                 }
@@ -266,13 +261,12 @@ function handleCardClick(card) {
 }
 
 /**
- * Ana Başlatma Fonksiyonu. (Oyun Sıfırlama Butonu)
+ * Ana Başlatma Fonksiyonu. 
  */
 function restartGame() {
     currentLevel = 1;
     initializeGame(currentLevel); 
     
-    // Overlay ayarlarını yap
     const config = LEVEL_CONFIG[currentLevel];
     startOverlay.querySelector('h2').textContent = `Bölüm ${currentLevel}`;
     const totalCards = config.pairs * 2 + config.bombs;
