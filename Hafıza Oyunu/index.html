@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bölümlü Hafıza Oyunu</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+    <h1>Bölümlü Hafıza Oyunu</h1>
+
+    <div id="start-overlay" class="overlay">
+        <h2>Bölüm 1</h2>
+        <p>Kart Sayısı: 8. Bomba: 0 adet. Bomba yok, can gerekmez.</p>
+        <button onclick="startCountdown()">OYUNA BAŞLA</button>
+    </div>
+
+    <div id="game-board" class="game-board hidden"> 
+        </div>
+
+    <div class="controls">
+        <p>Eşleşen Çift: <span id="match-count">0 / 4</span></p>
+        <p id="lives-display">Can: (0/0)</p>
+        <button onclick="restartGame()">Oyunu Sıfırla (1. Bölüm)</button>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

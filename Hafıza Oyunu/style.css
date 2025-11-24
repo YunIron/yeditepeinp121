@@ -1,0 +1,169 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0;
+    color: #333;
+    padding-bottom: 50px;
+}
+
+h1 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+/* --- Genel Görünüm ve Gizleme --- */
+.hidden {
+    display: none !important; 
+}
+
+/* --- Oyun Tahtası Konteyneri --- */
+.game-board {
+    display: grid;
+    gap: 10px;
+    padding: 10px;
+    background-color: #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Bölüm 1 (4 çift = 8 kart) - 4x2 düzeni */
+.board-small {
+    width: 300px;
+    height: 160px; 
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: repeat(2, 1fr);   
+}
+
+/* Bölüm 2 ve 3 (6-8 çift) - 5x4 düzeni (20 kart kapasiteli) */
+.board-medium {
+    width: 500px; 
+    height: 400px;
+    grid-template-columns: repeat(5, 1fr); 
+    grid-template-rows: repeat(4, 1fr);    
+}
+
+/* Bölüm 4 ve üstü (10+ çift) - 6x4 düzeni (24 kart kapasiteli) */
+.board-large {
+    width: 600px; 
+    height: 400px;
+    grid-template-columns: repeat(6, 1fr); 
+    grid-template-rows: repeat(4, 1fr);  
+}
+
+/* --- Kart Stilleri --- */
+.card {
+    background-color: #007bff; 
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+    user-select: none; 
+    
+    /* Kart Çevirme Efekti İçin */
+    transition: transform 0.5s;
+    transform-style: preserve-3d; 
+    position: relative;         
+}
+
+/* Kartın Ön ve Arka Yüzleri için Ortak Kural */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    backface-visibility: hidden; 
+}
+
+/* Kart Kapalıyken (Arka Yüz) */
+.card-back {
+    background-color: #007bff;
+    transform: rotateY(0deg); 
+}
+
+/* Kart Açıkken (Ön Yüz) */
+.card-front {
+    background-color: #fff;
+    color: #333;
+    transform: rotateY(180deg); 
+}
+
+/* Kart Çevrildiğinde (.flipped) */
+.flipped {
+    transform: rotateY(180deg); 
+    pointer-events: none; 
+}
+
+/* Eşleşen kartların görünümü */
+.matched {
+    pointer-events: none;
+    opacity: 0.5; 
+    border: 3px solid #28a745; 
+}
+
+/* Bomba kartı çevrildiğinde özel görünüm */
+.bomb-card.flipped .card-front {
+    background-color: #ff4d4d; /* Kırmızı renk */
+    color: white;
+    font-size: 30px; 
+}
+
+/* --- Kontroller ve Can Gösterimi --- */
+.controls {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#lives-display {
+    font-weight: bold;
+    color: #dc3545; 
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+/* --- Başlangıç Ekranı (Overlay) --- */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; 
+    text-align: center;
+}
+
+.overlay button {
+    padding: 15px 30px;
+    font-size: 20px;
+    margin-top: 20px;
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
