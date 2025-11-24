@@ -1,0 +1,34 @@
+# 🤖 Yapay Zeka (Gemini) Destek Raporu
+
+**Proje Adı:** Bölümlü Hafıza Oyunu (Memory Game)
+
+**Ödev Gerekliliği:** Yapay zekadan (AI) yardım alınan her durumda, kullanılan modelin adının ve verilen prompt (komut) metinlerinin not alınarak teslim sırasında açıklanması gerekmektedir.
+
+---
+
+## 1. 🔍 Kullanılan Yapay Zeka Modeli
+
+* **Model Adı:** **Gemini (Flash 2.5)** (Google tarafından geliştirilmiştir.)
+
+---
+
+## 2. 📝 Geliştirme Süreci ve Kullanılan Komutlar (Filtrelenmiş Prompt Geçmişi)
+
+Aşağıdaki liste, "Dosyaların olması gereken tam halini yaz" benzeri çıktı isteme komutları hariç, **projenin yönünü ve mantığını belirleyen tüm komutları** içermektedir.
+
+| S. No | Prompt (Verilen Komut) | Amaç/Sonuç |
+| :---: | :--- | :--- |
+| **1.** | **[Oyun fikri sorma/onaylatma komutu, ödev metninden türetilen]** | Projenin konusu olan **Hafıza Oyunu**'nun (Memory Game) belirlenmesi. |
+| **2.** | **Js dosyasını olması gereken halini komple yaz** | Oyunun temel eşleştirme (matching) mantığı için **ilk JavaScript kodu**nu oluşturmak. |
+| **3.** | **Bölüm mantığına geçeceğiz ve kolaydan zor'a doğru gidecek. Artık bölümler zorlaştıkca oyuna bomba emojisi eklenecek ve oyuncuya 2 can verilecek. Yanlışlıkla bomba emojilerine basılırsa olan 2 can azalacak. 2 can tamamen tükendiğinde o bölümü tekrardan oynayacak oyuncu.** | **Bölümleme sistemini** ve **sabit 2 can** ile çalışan **bomba mekaniğini** eklemek. |
+| **4.** | **İlk bölümlerde kart sayısı az olsun ve oyuncu ilerledikçe kart sayıları artsın.** | Oyunun zorluğunu artırmak için **dinamik kart sayısı** özelliğini eklemek. |
+| **5.** | **{ (Görseli içeren ilk hata bildirimi: Kartlar üst üste biniyor) } böyle gözüküyor hata var.** | Kart çevirme efektindeki (front/back face) **görsel hatayı** bildirmek. |
+| **6.** | **{ (Görseli içeren ikinci hata bildirimi: Kartlar tahtaya sığmıyor) } gördüğün gibi kartlar sığmıyor. Arttıkça genişlemesini sağla** | Artan kart sayısı nedeniyle **tahta taşma sorununu** (CSS Grid düzeni) bildirmek ve dinamik genişleme çözümü istemek. |
+| **7.** | **Bomba sayısına göre can olsun ve bütün bombaları patlatınca bölümü tekrar baştan oynamak zorunda kalınsın.** | **Can sistemini bomba sayısına göre dinamikleştiren** ve oyunu zorlaştıran son mekanik güncellemesini uygulamak. |
+---
+
+## 3. 🎯 YZ'nın Katkısı ve Kullanım Amacı
+
+Yapay zeka, projenin temel yapısını kurmak, kompleks oyun mekaniklerini (bölümleme, dinamik kart sayısı, bomba/can yönetimi) uygulamak ve karşılaşılan görsel/yapısal hataları (kart çakışması, tahta taşması) **hızlı ve doğru bir şekilde gidermek** amacıyla kullanılmıştır.
+
+YZ'nın ana katkıları, karmaşık JavaScript mantığını yapılandırmak ve CSS'teki zorlu 3D transformasyon ve Grid düzeni problemlerine anlık çözümler üreterek yazılım geliştirme sürecini hızlandıran ve kod kalitesini artıran bir yardımcı araç olarak işlev görmektir.
